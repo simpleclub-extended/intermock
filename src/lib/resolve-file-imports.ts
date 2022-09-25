@@ -1,5 +1,5 @@
-import {existsSync, readFileSync} from 'fs';
-import {resolve} from 'path';
+import {statSync, readFileSync} from 'fs';
+import {resolve, join} from 'path';
 
 import ts from 'typescript';
 
@@ -84,13 +84,18 @@ export function setImportExportSpecifier(
       tryFile(moduleFrom),
       tryFile(moduleFrom + '.ts'),
       tryFile(moduleFrom + '.tsx'),
-      tryFile(moduleFrom + 'index.ts'),
-      tryFile(moduleFrom + 'index.tsx'),
+      tryFile(join(moduleFrom, 'index.ts')),
+      tryFile(join(moduleFrom, 'index.tsx')),
     ];
 
     for (const f of tryFiles) {
-      if (existsSync(f)) {
-        return f;
+      try {
+        const stats = statSync(f);
+        if (stats.isFile()) {
+          return f;
+        }
+      } catch (_) {
+        // Skip file if it doesn't exist
       }
     }
 
