@@ -41,6 +41,7 @@ import {expectedSpecificInterface} from './test-data/specificInterfaces';
 import {expectedTuple1} from './test-data/tuple';
 import {expectedTypeAlias} from './test-data/typeAlias';
 import {expectedUnion} from './test-data/unions';
+import {expectedFolderImport} from './test-data/folderImport/import';
 
 async function runTestCase(
     file: string, outputProp: string, expected: unknown, options?: Options) {
@@ -201,6 +202,13 @@ describe('Intermock TypeScript: Mock tests', () => {
     return runTestCase(
         `${__dirname}/test-data/importExportSpecifier/import.ts`, 'Foo',
         expectedImportExportSpecifier.Foo,
+        {importsResolver: setImportExportSpecifier});
+  });
+
+  it('should generate mock for folder imported interfaces', async () => {
+    return runTestCase(
+        `${__dirname}/test-data/folderImport/import.ts`, 'Foo',
+        expectedFolderImport.Foo,
         {importsResolver: setImportExportSpecifier});
   });
 });
