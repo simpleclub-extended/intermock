@@ -918,7 +918,7 @@ function processFile(
           const cache: Output = {};
           options.importsResolver(
             sourceFile, cache, types, propToTraverse, propToTraverse, options);
-          for (const [key, value] of Object.entries(cache[propToTraverse])) {
+          for (const [key, value] of Object.entries(cache[propToTraverse] ?? {})) {
             // tslint:disable-next-line:no-any
             output[key] = value as any;
           }
