@@ -912,6 +912,19 @@ function processFile(
         }
         break;
 
+      case ts.SyntaxKind.ImportSpecifier:
+      case ts.SyntaxKind.ExportSpecifier:
+        if (propToTraverse && options.importsResolver) {
+          const cache: Output = {};
+          options.importsResolver(
+            sourceFile, cache, types, propToTraverse, propToTraverse, options);
+          for (const [key, value] of Object.entries(cache[propToTraverse])) {
+            // tslint:disable-next-line:no-any
+            output[key] = value as any;
+          }
+        }
+        break;
+
       default:
         break;
     }
